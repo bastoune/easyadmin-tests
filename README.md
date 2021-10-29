@@ -12,3 +12,7 @@
 ## run the tests and see the error
 - docc exec test_easyadmin /bin/sh
 - ./vendor/bin/phpunit
+```
+1) App\Tests\EasyAdminIndexAvailabilityTest::testAvailability with data set #0 ('App\Controller\UserCrudController', 'User')
+TypeError: Argument 1 passed to EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator::setController() must be of the type string, null given, called in /var/www/test_easyadmin/vendor/twig/twig/src/Extension/CoreExtension.php on line 1544
+```
