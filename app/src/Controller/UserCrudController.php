@@ -21,7 +21,7 @@ class UserCrudController extends AbstractBaseCrudController
 
     public function getFields(string $pageName): Traversable
     {
-        yield UUIDField::create('id', $pageName);
+        yield TextField::new('id');
 //        yield TextField::new('firstName');
 //        yield TextField::new('lastName');
 //        yield TextField::new('email');

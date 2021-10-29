@@ -1,9 +1,4 @@
 <?php
-/**
- * @author Bastien SANDER <bastien@heyliot.com>
- * @copyright 2020 Heyliot (http://www.heyliot.com)
- */
-
 namespace App\Controller;
 
 use LogicException;
@@ -28,7 +23,7 @@ class SecurityController extends AbstractController
             'error' => $error,
             'last_username' => $lastUsername,
             'translation_domain' => 'admin',
-            'page_title' => 'Heyliot API V2',
+            'page_title' => 'Hello',
             'csrf_token_intention' => 'authenticate',
             'target_path' => $this->generateUrl('easy_admin_dashboard'),
             'username_label' => 'Your username',

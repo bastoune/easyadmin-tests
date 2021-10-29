@@ -14,6 +14,10 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
             lazy: true
             provider: app_user_provider
             logout:
@@ -32,8 +36,8 @@ security:
     access_control:
         - path: ^/(login|logout)
           roles: PUBLIC_ACCESS
-#          requires_channel: '%env(SECURE_SCHEME)%'
+          requires_channel: '%env(SECURE_SCHEME)%'
 
         - path: ^/
           roles: ROLE_SUPER_ADMIN
-#          requires_channel: '%env(SECURE_SCHEME)%'
+          requires_channel: '%env(SECURE_SCHEME)%'

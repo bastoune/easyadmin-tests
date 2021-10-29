@@ -30,8 +30,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('<img alt="heyliot\'s logo" src="https://static.heyliot.dev/assets/img/logo_mini.svg" /> Client Data Dashboard')
-            ->setFaviconPath('https://static.heyliot.dev/assets/img/logo_mini.svg')
+            ->setTitle('Client Data Dashboard')
             ->setTranslationDomain('admin')
             ->disableUrlSignatures()
         ;
@@ -43,7 +42,5 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Organizations');
         yield MenuItem::linkToCrud('Users', 'fa fa-user', User::class);
-
-
     }
 }

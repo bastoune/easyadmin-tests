@@ -26,8 +26,6 @@ services:
         - XDEBUG_REMOTE_CONNECT_BACK=0
         - XDEBUG_START_WITH_REQUEST=yes
     volumes:
-      - '/home/bastio/.ssh/id_rsa_bastien_heyliot:/root/.ssh/id_rsa'
-      - '/home/bastio/.ssh/id_rsa_bastien_heyliot.pub:/root/.ssh/id_rsa.pub'
       - './app:/var/www/test_easyadmin'
       - './docker/php_over.ini:/usr/local/etc/php/php_over.ini'
     environment: # dynamic env vars
@@ -53,7 +51,8 @@ services:
   # HTTP LOAD BALANCER
   nginx_test_easyadmin:
     container_name: nginx_test_easyadmin
-    image: nginx:1.17-alpine
+    build:
+      context: ./docker/nginx_lb/
     volumes:
       - './docker/nginx_lb/proxy_params:/etc/nginx/proxy_params'
       - './docker/nginx_lb/nginx.conf:/etc/nginx/nginx.conf'
@@ -67,7 +66,7 @@ services:
     networks:
       test_easyadmin:
         aliases:
-          - test_easyadmin.heyliot.local
+          - test_easyadmin.local
 
 networks:
   test_easyadmin:

@@ -1,15 +1,9 @@
 <?php
-/**
- * @author Bastien SANDER <bastien@heyliot.com>
- * @copyright 2020 Heyliot (http://www.heyliot.com)
- */
 
 namespace App\Controller;
 
-//use App\Forms\CustomFields\LifecycleDateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Traversable;

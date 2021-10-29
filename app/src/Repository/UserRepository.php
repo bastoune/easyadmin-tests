@@ -1,8 +1,4 @@
 <?php
-/**
- * @author Bastien SANDER <bastien@heyliot.com>
- * @copyright 2020 Heyliot (http://www.heyliot.com)
- */
 
 namespace App\Repository;
 

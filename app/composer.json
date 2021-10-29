@@ -3,12 +3,6 @@
     "license": "proprietary",
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "ssh://git@gitlab.com/heyliot/packages/php/helpers"
-        }
-    ],
     "require": {
         "php": ">=7.2.5",
         "ext-ctype": "*",
@@ -19,7 +13,6 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.10",
         "easycorp/easyadmin-bundle": "^3.5",
-        "heyliot/helpers": "^1.6",
         "phpdocumentor/reflection-docblock": "^5.3",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/asset": "5.3.*",
