@@ -14,12 +14,6 @@ class EasyAdminIndexAvailabilityTest extends WebTestCase
     protected ?KernelBrowser $client = null;
     private $userRepository;
 
-    public function setUp(): void
-    {
-        $this->client = static::createClient();
-        $this->userRepository = self::getContainer()->get('doctrine')->getRepository(User::class);
-    }
-
     /**
      * @dataProvider availableIndexProvider
      *
@@ -27,6 +21,9 @@ class EasyAdminIndexAvailabilityTest extends WebTestCase
      */
     public function testAvailability(string $crudFqcn)
     {
+        $client = static::createClient();
+        $userRepository = self::getContainer()->get('doctrine')->getRepository(User::class);
+
         /** @var RouterInterface $router */
         $router = self::getContainer()->get(RouterInterface::class);
         /** @var CrudControllerRegistry $crudControllerRegistry */
@@ -40,11 +37,11 @@ class EasyAdminIndexAvailabilityTest extends WebTestCase
             ]
         );
 
-        $testUser = $this->userRepository->findOneBy(['email' => 'admin@admin.com']);
+        $testUser = $userRepository->findOneBy(['email' => 'admin@admin.com']);
 
-        $this->client->loginUser($testUser);
+        $client->loginUser($testUser);
 
-        $this->client->request('GET', $route);
+        $client->request('GET', $route);
 
         $this->assertResponseIsSuccessful();
     }

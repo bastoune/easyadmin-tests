@@ -74,13 +74,6 @@ class User extends BaseEntity implements PasswordAuthenticatedUserInterface, UUI
     private ?array $roles = [];
 
     /**
-     *  @Groups({"User:read:item", "User:write"})
-     *
-     *  @ORM\Column(type="boolean", options={"default":false})
-     */
-    private $forceChangePassword = false;
-
-    /**
      * User constructor.
      */
     public function __construct()
@@ -178,18 +171,6 @@ class User extends BaseEntity implements PasswordAuthenticatedUserInterface, UUI
     {
         $this->password = $password;
 
-        return $this;
-    }
-
-
-    public function getForceChangePassword()
-    {
-        return $this->forceChangePassword;
-    }
-
-    public function setForceChangePassword(bool $forceChangePassword): self
-    {
-        $this->forceChangePassword = $forceChangePassword;
         return $this;
     }
 
