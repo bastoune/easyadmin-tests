@@ -10,7 +10,7 @@
 - your should see the user list page
 
 ## run the tests and see the error
-- docc exec test_easyadmin /bin/sh
+- docker-compose exec test_easyadmin /bin/sh
 - ./vendor/bin/phpunit
 ```
 1) App\Tests\EasyAdminIndexAvailabilityTest::testAvailability with data set #0 ('App\Controller\UserCrudController', 'User')
