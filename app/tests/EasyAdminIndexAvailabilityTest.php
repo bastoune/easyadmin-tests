@@ -19,13 +19,13 @@ class EasyAdminIndexAvailabilityTest extends WebTestCase
         $this->client = static::createClient();
         $this->userRepository = self::getContainer()->get('doctrine')->getRepository(User::class);
     }
+
     /**
      * @dataProvider availableIndexProvider
      *
      * @param string $crudFqcn
-     * @param string $expectedPageTitle
      */
-    public function testAvailability(string $crudFqcn, string $expectedPageTitle)
+    public function testAvailability(string $crudFqcn)
     {
         /** @var RouterInterface $router */
         $router = self::getContainer()->get(RouterInterface::class);
@@ -44,18 +44,13 @@ class EasyAdminIndexAvailabilityTest extends WebTestCase
 
         $this->client->loginUser($testUser);
 
-        $crawler = $this->client->request('GET', $route);
+        $this->client->request('GET', $route);
 
         $this->assertResponseIsSuccessful();
-
-        $pageTitle = $crawler->filter('h1.title')->first()->text();
-        $pageTitle = trim(str_replace("\n", "", $pageTitle));
-
-        $this->assertEquals($expectedPageTitle, $pageTitle);
     }
 
     public function availableIndexProvider()
     {
-        yield [UserCrudController::class, "User"];
+        yield [UserCrudController::class];
     }
 }
