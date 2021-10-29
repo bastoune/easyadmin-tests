@@ -1,0 +1,59 @@
+version:  '3.7'
+
+services:
+###> doctrine/doctrine-bundle ###
+  database_test_easyadmin:
+    container_name: database_test_easyadmin
+    image: postgres:${POSTGRES_VERSION:-13}-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      # You should definitely change the password in production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe}
+      POSTGRES_USER: ${POSTGRES_USER:-symfony}
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw
+    networks:
+      infra-dev-web:
+    ports:
+      - '5434:5432'
+
+  test_easyadmin:
+    container_name: test_easyadmin
+    build:
+      context: docker/
+      args:
+        - XDEBUG_REMOTE_PORT=10004
+        - XDEBUG_REMOTE_HOST=host.docker.internal
+        - XDEBUG_REMOTE_CONNECT_BACK=0
+        - XDEBUG_START_WITH_REQUEST=yes
+    volumes:
+      - '/home/bastio/.ssh/id_rsa_bastien_heyliot:/root/.ssh/id_rsa'
+      - '/home/bastio/.ssh/id_rsa_bastien_heyliot.pub:/root/.ssh/id_rsa.pub'
+      - './app:/var/www/test_easyadmin'
+      - './docker/php_over.ini:/usr/local/etc/php/php_over.ini'
+    environment: # dynamic env vars
+      - COMPOSER_MEMORY_LIMIT=-1
+      - DATABASE_URL=postgresql://symfony:ChangeMe@database_test_easyadmin/app
+    working_dir: /var/www/test_easyadmin
+    command:
+      - /bin/sh
+      - -c
+      - |
+        ssh-keyscan -H gitlab.com >> /root/.ssh/known_hosts
+        rm -rf var/cache/* && rm -rf var/log/* && chmod -R 777 var/*
+        composer install
+        bin/console doctrine:migrations:migrate --allow-no-migration -n
+        php bin/console assets:install
+        yarn && yarn run build
+        php-fpm
+    depends_on:
+      - database_test_easyadmin
+    networks:
+      infra-dev-web:
+
+networks:
+  infra-dev-web:
+    name: infra-dev-web
+
+volumes:
+  db-data:

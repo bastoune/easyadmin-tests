@@ -1,0 +1,37 @@
+security:
+    enable_authenticator_manager: true
+    encoders:
+        App\Entity\Core\User:
+            algorithm: bcrypt
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\Core\User
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            lazy: true
+            provider: app_user_provider
+            logout:
+                path: app_logout
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#the-firewall
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - path: ^/(login|logout)
+          roles: PUBLIC_ACCESS
+          requires_channel: '%env(SECURE_SCHEME)%'
+
+        - path: ^/
+          roles: ROLE_SUPER_ADMIN
+          requires_channel: '%env(SECURE_SCHEME)%'
