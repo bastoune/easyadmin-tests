@@ -18,6 +18,8 @@ security:
             provider: app_user_provider
             logout:
                 path: app_logout
+            custom_authenticator: App\Security\LoginFormAuthenticator
+            entry_point: App\Security\LoginFormAuthenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -30,8 +32,8 @@ security:
     access_control:
         - path: ^/(login|logout)
           roles: PUBLIC_ACCESS
-          requires_channel: '%env(SECURE_SCHEME)%'
+#          requires_channel: '%env(SECURE_SCHEME)%'
 
         - path: ^/
           roles: ROLE_SUPER_ADMIN
-          requires_channel: '%env(SECURE_SCHEME)%'
+#          requires_channel: '%env(SECURE_SCHEME)%'

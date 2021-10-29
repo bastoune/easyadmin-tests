@@ -7,15 +7,14 @@ services:
     image: postgres:${POSTGRES_VERSION:-13}-alpine
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe}
       POSTGRES_USER: ${POSTGRES_USER:-symfony}
     volumes:
       - db-data:/var/lib/postgresql/data:rw
-    networks:
-      infra-dev-web:
     ports:
       - '5434:5432'
+    networks:
+      - test_easyadmin
 
   test_easyadmin:
     container_name: test_easyadmin
@@ -49,11 +48,30 @@ services:
     depends_on:
       - database_test_easyadmin
     networks:
-      infra-dev-web:
+      - test_easyadmin
+
+  # HTTP LOAD BALANCER
+  nginx_test_easyadmin:
+    container_name: nginx_test_easyadmin
+    image: nginx:1.17-alpine
+    volumes:
+      - './docker/nginx_lb/proxy_params:/etc/nginx/proxy_params'
+      - './docker/nginx_lb/nginx.conf:/etc/nginx/nginx.conf'
+      - './docker/nginx_lb/sites-available:/etc/nginx/sites-available'
+      - './app/public:/var/www/test_easyadmin/public'
+    ports:
+      - '80:80'
+      - '443:443'
+    depends_on:
+      - test_easyadmin
+    networks:
+      test_easyadmin:
+        aliases:
+          - test_easyadmin.heyliot.local
 
 networks:
-  infra-dev-web:
-    name: infra-dev-web
+  test_easyadmin:
+    name: test_easyadmin
 
 volumes:
   db-data:
