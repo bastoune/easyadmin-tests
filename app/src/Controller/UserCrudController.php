@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Core\User;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Traversable;
 
-class UserCrudController extends AbstractBaseCrudController
+class UserCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
