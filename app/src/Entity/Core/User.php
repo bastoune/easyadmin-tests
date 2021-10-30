@@ -2,26 +2,22 @@
 
 namespace App\Entity\Core;
 
-use App\Entity\Definition\AuthenticableInterface;
 use App\Entity\Definition\AuthenticableTrait;
-use App\Entity\Definition\BaseEntity;
-use App\Entity\Definition\UUIDEntityInterface;
 use App\Entity\Definition\UUIDEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="`user`")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User extends BaseEntity implements PasswordAuthenticatedUserInterface, UUIDEntityInterface, AuthenticableInterface
+class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
-    use AuthenticableTrait;
-    use UUIDEntityTrait;
-
     /**
      * @Groups({"User:read"})
      * @ORM\Id()
@@ -31,35 +27,12 @@ class User extends BaseEntity implements PasswordAuthenticatedUserInterface, UUI
 
     /**
      * @Assert\NotNull
-     * @Groups({"User:read", "User:write"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
-    private $firstName;
-
-    /**
-     * @Assert\NotNull
-     * @Groups({"User:read", "User:write"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
-    private $lastName;
-
-    /**
-     * @Assert\NotNull
      * @Assert\Email
      * @Groups({"User:read", "User:write"})
      *
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
-
-    /**
-     * @Groups({"User:read", "User:write"})
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $phone;
 
     /**
      * @Groups({"User:write"})
@@ -78,7 +51,12 @@ class User extends BaseEntity implements PasswordAuthenticatedUserInterface, UUI
      */
     public function __construct()
     {
-        $this->generateUUId();
+        $this->id = Uuid::v4();
+    }
+
+    public function getId(): UuidV4
+    {
+        return $this->id;
     }
 
     public function getEmail(): ?string
@@ -89,42 +67,6 @@ class User extends BaseEntity implements PasswordAuthenticatedUserInterface, UUI
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getFirstName(): ?string
-    {
-        return $this->firstName;
-    }
-
-    public function setFirstName(string $firstName): self
-    {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): self
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(?string $phone): self
-    {
-        $this->phone = $phone;
 
         return $this;
     }
@@ -182,5 +124,25 @@ class User extends BaseEntity implements PasswordAuthenticatedUserInterface, UUI
     public function __toString(): string
     {
         return $this->getUsername();
+    }
+
+    public function addRole(string $role): self
+    {
+        $this->roles[] = $role;
+        $this->roles = array_unique($this->roles);
+        return $this;
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return in_array($role, $this->getRoles());
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
     }
 }
